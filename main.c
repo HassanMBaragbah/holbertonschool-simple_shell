@@ -1,7 +1,7 @@
 /**
  * main - entry point for the simple shell
- * @ac: argument count
- * @av: argument vector
+ * @argc: argument count
+ * @argv: argument vector
  * @env: environment variables
  *
  * Return: 0 on success, or exit code on failure

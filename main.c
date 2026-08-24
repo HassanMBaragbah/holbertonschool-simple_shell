@@ -18,19 +18,15 @@ int main(int argc, char **argv)
 
 /**
  * execute_cmd - executes a command using fork and execve
- * @command: full path of the command to execute
+ * @args: array of command arguments (args[0] is the command path)
  * @prog_name: program name for error printing
  *
  * Return: 0 on success, -1 on failure
  */
-int execute_cmd(char *command, char *prog_name)
+int execute_cmd(char **args, char *prog_name)
 {
 	pid_t child_pid;
 	int status;
-	char *args[2];
-
-	args[0] = command;
-	args[1] = NULL;
 
 	child_pid = fork();
 	if (child_pid == -1)
@@ -64,7 +60,9 @@ void run_shell(char *prog_name)
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t nread;
-	char *cmd;
+	char *args[1024];
+	char *token;
+	int i;
 
 	while (1)
 	{
@@ -79,12 +77,19 @@ void run_shell(char *prog_name)
 			exit(EXIT_SUCCESS);
 		}
 
-		cmd = strtok(line, " \t\n");
+		i = 0;
+		token = strtok(line, " \t\n");
+		while (token != NULL)
+		{
+			args[i++] = token;
+			token = strtok(NULL, " \t\n");
+		}
+		args[i] = NULL;
 
-		if (cmd == NULL)
+		if (args[0] == NULL)
 			continue;
 
-		execute_cmd(cmd, prog_name);
+		execute_cmd(args, prog_name);
 	}
 
 	free(line);

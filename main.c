@@ -64,6 +64,7 @@ void run_shell(char *prog_name)
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t nread;
+	char *cmd;
 
 	while (1)
 	{
@@ -78,13 +79,12 @@ void run_shell(char *prog_name)
 			exit(EXIT_SUCCESS);
 		}
 
-		if (nread > 0 && line[nread - 1] == '\n')
-			line[nread - 1] = '\0';
+		cmd = strtok(line, " \t\n");
 
-		if (line[0] == '\0')
+		if (cmd == NULL)
 			continue;
 
-		execute_cmd(line, prog_name);
+		execute_cmd(cmd, prog_name);
 	}
 
 	free(line);

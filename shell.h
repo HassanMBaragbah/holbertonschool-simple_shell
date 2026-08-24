@@ -12,6 +12,6 @@ extern char **environ;
 
 /* Core Functions */
 void run_shell(char *prog_name);
-int execute_cmd(char *command, char *prog_name);
+int execute_cmd(char **args, char *prog_name);
 
 #endif /* SHELL_H */

@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 
 /**
  * execute_cmd - executes a command using fork and execve
- * @args: array of command arguments (args[0] is the command path)
+ * @args: array of command arguments
  * @prog_name: program name for error printing
  *
  * Return: 0 on success, -1 on failure

@@ -66,7 +66,7 @@ int execute_cmd(char **args, char *prog_name)
 
 	if (path != args[0])
 		free(path);
-
+	// this was addded to return the exit status of the child process 
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 }

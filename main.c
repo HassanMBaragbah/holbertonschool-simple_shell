@@ -106,6 +106,11 @@ void run_shell(char *prog_name)
 
 		if (args[0] == NULL)
 			continue;
+		if (strcmp(args[0], "exit") == 0)
+		{	
+		free(line);
+		exit(EXIT_SUCCESS);
+		}
 
 		execute_cmd(args, prog_name);
 	}

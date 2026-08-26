@@ -127,7 +127,7 @@ char *find_command(char *command)
 
 	path = get_path();
 
-	if (path == NULL || path[0] == '\0')
+	if (path == NULL || _strlen(path) == 0)
 	return (NULL);
 
 	path_len = _strlen(path);
@@ -142,6 +142,7 @@ char *find_command(char *command)
 
 	dir = strtok(path_copy, ":");
 
+    
 	while (dir != NULL)
 	{
 		full_path = build_path(dir, command);

@@ -22,22 +22,37 @@ int main(int argc, char **argv)
  * @prog_name: program name for error printing
  *
  * Return: 0 on success, -1 on failure
+ * I have edited the function to handel the path 
  */
 int execute_cmd(char **args, char *prog_name)
 {
 	pid_t child_pid;
 	int status;
+	char *path;
 
-	child_pid = fork();
-	if (child_pid == -1)
+	path = find_command(args[0]);
+
+	if (path == NULL)
 	{
 		perror(prog_name);
 		return (-1);
 	}
 
+	child_pid = fork();
+
+	if (child_pid == -1)
+	{
+		perror(prog_name);
+
+		if (path != args[0])
+			free(path);
+
+		return (-1);
+	}
+
 	if (child_pid == 0)
 	{
-		if (execve(args[0], args, environ) == -1)
+		if (execve(path, args, environ) == -1)
 		{
 			perror(prog_name);
 			_exit(1);
@@ -46,6 +61,9 @@ int execute_cmd(char **args, char *prog_name)
 	else
 	{
 		wait(&status);
+
+		if (path != args[0])
+			free(path);
 	}
 
 	return (0);

@@ -61,16 +61,17 @@ int execute_cmd(char **args, char *prog_name)
 		}
 	}
 	else
-	{
-		wait(&status);
+{
+	wait(&status);
 
-		if (path != args[0])
-			free(path);
-			if (WIFEXITED(status))
+	if (path != args[0])
+		free(path);
+
+	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	}
+}
 
-	return (0);
+return (0);
 }
 
 /**

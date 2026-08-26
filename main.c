@@ -66,6 +66,8 @@ int execute_cmd(char **args, char *prog_name)
 
 		if (path != args[0])
 			free(path);
+			if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
 	}
 
 	return (0);

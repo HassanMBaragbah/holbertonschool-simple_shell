@@ -21,8 +21,7 @@ int main(int argc, char **argv)
  * @args: array of command arguments
  * @prog_name: program name for error printing
  *
- * Return: 0 on success, -1 on failure
- * I have edited the function to handel the path 
+ * Return: 0 on success, 127 if command is not found
  */
 int execute_cmd(char **args, char *prog_name)
 {
@@ -34,8 +33,11 @@ int execute_cmd(char **args, char *prog_name)
 
 	if (path == NULL)
 	{
-		perror(prog_name);
-		return (-1);
+		write(STDERR_FILENO, prog_name, strlen(prog_name));
+		write(STDERR_FILENO, ": 1: ", 5);
+		write(STDERR_FILENO, args[0], strlen(args[0]));
+		write(STDERR_FILENO, ": not found\n", 12);
+		return (127);
 	}
 
 	child_pid = fork();
@@ -67,6 +69,20 @@ int execute_cmd(char **args, char *prog_name)
 	}
 
 	return (0);
+}
+
+/**
+ * print_env - prints the current environment
+ */
+void print_env(void)
+{
+	int i;
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		write(STDOUT_FILENO, environ[i], strlen(environ[i]));
+		write(STDOUT_FILENO, "\n", 1);
+	}
 }
 
 /**
@@ -112,6 +128,11 @@ void run_shell(char *prog_name)
 		exit(EXIT_SUCCESS);
 		}
 
+		if (strcmp(args[0], "env") == 0)
+		{
+		print_env();
+		continue;
+		}
 		execute_cmd(args, prog_name);
 	}
 

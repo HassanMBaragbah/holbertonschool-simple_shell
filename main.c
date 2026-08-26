@@ -97,6 +97,7 @@ void run_shell(char *prog_name)
 	char *args[1024];
 	char *token;
 	int i;
+	int status = 0; /* NEW */
 
 	while (1)
 	{
@@ -108,33 +109,36 @@ void run_shell(char *prog_name)
 		if (nread == -1)
 		{
 			free(line);
-			exit(EXIT_SUCCESS);
+			exit(status); /* CHANGED */
 		}
 
 		i = 0;
 		token = strtok(line, " \t\n");
+
 		while (token != NULL)
 		{
 			args[i++] = token;
 			token = strtok(NULL, " \t\n");
 		}
+
 		args[i] = NULL;
 
 		if (args[0] == NULL)
 			continue;
+
 		if (strcmp(args[0], "exit") == 0)
-		{	
-		free(line);
-		exit(EXIT_SUCCESS);
+		{
+			free(line);
+			exit(status);
 		}
 
 		if (strcmp(args[0], "env") == 0)
 		{
-		print_env();
-		continue;
+			print_env();
+			status = 0;
+			continue;
 		}
-		execute_cmd(args, prog_name);
-	}
 
-	free(line);
+		status = execute_cmd(args, prog_name); /* CHANGED */
+	}
 }

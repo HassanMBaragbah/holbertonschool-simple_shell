@@ -127,8 +127,8 @@ char *find_command(char *command)
 
 	path = get_path();
 
-	if (path == NULL)
-		return (NULL);
+	if (path == NULL || path[0] == '\0')
+	return (NULL);
 
 	path_len = _strlen(path);
 
